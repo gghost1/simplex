@@ -1,21 +1,23 @@
 package org.example;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Simplex {
 
     private final float[][] table;
     private final int argsCount;
-    private final List<Float> answer;
+    private final HashMap<Integer, Integer> answer;
 
     public Simplex(List<Float> C, List<List<Float>> A, List<Float> b) {
         argsCount = C.size();
         table = Table.buildTable(C, A, b);
 
-        answer = new ArrayList<>();
+        answer = new HashMap<>();
         for (int i = 0; i < C.size(); i++) {
-            answer.add(0f);
+            answer.put(i, -1);
         }
     }
 
@@ -39,11 +41,29 @@ public class Simplex {
                     table[i][j] = arg - scale * table[pivotRow][j];
                 }
             }
-            answer.set(pivotCol, table[pivotRow][table[0].length-1]);
+            if (answer.containsValue(pivotRow)) {
+                for (Map.Entry<Integer, Integer> entry : answer.entrySet()) {
+                    if (entry.getValue() == pivotRow) {
+                        answer.put(entry.getKey(), -1);
+                    }
+                }
+            }
+
+            answer.put(pivotCol, pivotRow);
             pivotCol = findPivotCol();
         }
-        return answer;
 
+        List<Float> solution = new ArrayList<>();
+        for (Map.Entry<Integer, Integer> entry : answer.entrySet()) {
+            if (entry.getValue() == -1) {
+                solution.add(0f);
+            } else {
+                solution.add(table[entry.getValue()][table[0].length-1]);
+            }
+        }
+
+
+        return solution;
     }
 
     private int findPivotCol() {
