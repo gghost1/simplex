@@ -1,15 +1,13 @@
 package org.example;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
 
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
+        System.out.println("Program applicable only for maximization problems with bounds containing only <=");
 
         System.out.print("Enter the number of variables (coefficients of the objective function): ");
         int numVariables = scanner.nextInt();
