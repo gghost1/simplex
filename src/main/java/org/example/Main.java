@@ -3,29 +3,54 @@ package org.example;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 
 public class Main {
 
     public static void main(String[] args) {
 
-        List<Float> C = new ArrayList<>(){{
-            add(-4f);
-            add(1f);
-            add(-2f);
-        }};
-        List<List<Float>> A = new ArrayList<>(){{
-            add(Arrays.asList(1f, 1f, -1f));
-            add(Arrays.asList(2f, -2f, 1f));
-            add(Arrays.asList(6f, 10f, 0f));
-        }};
-        List<Float> b = new ArrayList<>(){{
-            add(10f);
-            add(30f);
-            add(45f);
-        }};
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Enter the number of variables (coefficients of the objective function): ");
+        int numVariables = scanner.nextInt();
+        List<Float> C = new ArrayList<>();
+
+        System.out.println("Enter the coefficients of the objective function (C): ");
+        for (int i = 0; i < numVariables; i++) {
+            System.out.print("C[" + i + "]: ");
+            C.add(scanner.nextFloat());
+        }
+
+        System.out.print("Enter the number of restrictive functions: ");
+        int numConstraints = scanner.nextInt();
+        List<List<Float>> A = new ArrayList<>();
+        List<Float> b = new ArrayList<>();
+
+        System.out.println("Enter the coefficients of the restrictive functions (A):");
+        for (int i = 0; i < numConstraints; i++) {
+            System.out.println("Restrictive function " + (i + 1) + ":");
+            List<Float> rowA = new ArrayList<>();
+            for (int j = 0; j < numVariables; j++) {
+                System.out.print("A[" + i + "][" + j + "]: ");
+                rowA.add(scanner.nextFloat());
+            }
+            A.add(rowA);
+        }
+
+        System.out.println("Enter the values on the right side of the constraints (b): ");
+        for (int i = 0; i < numConstraints; i++) {
+            System.out.print("b[" + i + "]: ");
+            b.add(scanner.nextFloat());
+        }
+
+
+        System.out.print("Enter the rounding precision: ");
+        int precision = scanner.nextInt();
+
+        scanner.close();
         Simplex simplex = new Simplex(C, A, b);
         List<Float> answer = simplex.apply();
         System.out.println(answer);
-
+        System.out.println(simplex.getAnswer());
     }
 }

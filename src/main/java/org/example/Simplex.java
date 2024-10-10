@@ -9,15 +9,17 @@ public class Simplex {
 
     private final float[][] table;
     private final int argsCount;
-    private final HashMap<Integer, Integer> answer;
+    private final HashMap<Integer, Integer> answerScales;
+
+    private float answer;
 
     public Simplex(List<Float> C, List<List<Float>> A, List<Float> b) {
         argsCount = C.size();
         table = Table.buildTable(C, A, b);
 
-        answer = new HashMap<>();
+        answerScales = new HashMap<>();
         for (int i = 0; i < C.size(); i++) {
-            answer.put(i, -1);
+            answerScales.put(i, -1);
         }
     }
 
@@ -41,20 +43,20 @@ public class Simplex {
                     table[i][j] = arg - scale * table[pivotRow][j];
                 }
             }
-            if (answer.containsValue(pivotRow)) {
-                for (Map.Entry<Integer, Integer> entry : answer.entrySet()) {
+            if (answerScales.containsValue(pivotRow)) {
+                for (Map.Entry<Integer, Integer> entry : answerScales.entrySet()) {
                     if (entry.getValue() == pivotRow) {
-                        answer.put(entry.getKey(), -1);
+                        answerScales.put(entry.getKey(), -1);
                     }
                 }
             }
 
-            answer.put(pivotCol, pivotRow);
+            answerScales.put(pivotCol, pivotRow);
             pivotCol = findPivotCol();
         }
 
         List<Float> solution = new ArrayList<>();
-        for (Map.Entry<Integer, Integer> entry : answer.entrySet()) {
+        for (Map.Entry<Integer, Integer> entry : answerScales.entrySet()) {
             if (entry.getValue() == -1) {
                 solution.add(0f);
             } else {
@@ -62,7 +64,7 @@ public class Simplex {
             }
         }
 
-
+        answer = table[0][table[0].length-1];
         return solution;
     }
 
@@ -91,4 +93,10 @@ public class Simplex {
         return pivotRow;
     }
 
+    public float getAnswer() {
+        if (answer != 0) {
+            return answer;
+        }
+        return Float.NaN;
+    }
 }
