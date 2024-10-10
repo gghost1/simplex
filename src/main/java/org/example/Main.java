@@ -49,7 +49,7 @@ public class Main {
 
         scanner.close();
         Simplex simplex = new Simplex(C, A, b);
-        List<Float> answer = simplex.apply();
+        List<Float> answer = simplex.apply(precision);
         System.out.println(answer);
         System.out.println(simplex.getAnswer());
     }

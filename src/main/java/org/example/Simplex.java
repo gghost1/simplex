@@ -1,9 +1,8 @@
 package org.example;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.*;
 
 public class Simplex {
 
@@ -23,7 +22,7 @@ public class Simplex {
         }
     }
 
-    public List<Float> apply() {
+    public List<Float> apply(int e) {
 
         int pivotCol = findPivotCol();
         while (pivotCol != -1) {
@@ -60,11 +59,13 @@ public class Simplex {
             if (entry.getValue() == -1) {
                 solution.add(0f);
             } else {
-                solution.add(table[entry.getValue()][table[0].length-1]);
+                float arg = table[entry.getValue()][table[0].length-1];
+
+                solution.add(BigDecimal.valueOf(arg).setScale(e, RoundingMode.HALF_UP).floatValue());
             }
         }
 
-        answer = table[0][table[0].length-1];
+        answer = BigDecimal.valueOf(table[0][table[0].length - 1]).setScale(e, RoundingMode.HALF_UP).floatValue();
         return solution;
     }
 
