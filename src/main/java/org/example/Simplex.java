@@ -27,7 +27,9 @@ public class Simplex {
         int pivotCol = findPivotCol();
         while (pivotCol != -1) {
             int pivotRow = findPivotRow(pivotCol);
-            // exception if pivotRow == -1
+            if (pivotRow == -1) {
+                throw new RuntimeException("The problem is unbounded");
+            }
 
             final float pivotArg = table[pivotRow][pivotCol];
             for (int i = 0; i < table[0].length; i++) {
