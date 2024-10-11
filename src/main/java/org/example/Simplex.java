@@ -73,7 +73,7 @@ public class Simplex {
 
     private int findPivotCol() {
         float[] firstRow = table[0];
-        for (int i = 0; i < argsCount; i++) {
+        for (int i = 0; i < table[0].length; i++) {
             if (firstRow[i] < 0) {
                 return i;
             }
