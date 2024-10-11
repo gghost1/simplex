@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
 
 public class SimplexTest {
 
@@ -77,7 +78,6 @@ public class SimplexTest {
         };
         Simplex simplex = new Simplex(C, A, b);
         List<Float> answer = simplex.apply(1);
-        System.out.println(simplex.getAnswer());
         assertEquals(answer, Arrays.asList(0f, 4.4f));
     }
 
@@ -111,8 +111,33 @@ public class SimplexTest {
         };
         Simplex simplex = new Simplex(C, A, b);
         List<Float> answer = simplex.apply(2);
-        System.out.println(simplex.getAnswer());
         assertEquals(answer, Arrays.asList(0f, 14.33f, 0f, 6.67f, 0f, 0f));
+    }
+
+    @Test
+    public void testUnboundedSimplex() {
+        List<Float> C = new ArrayList<>(){
+            {
+                add(3f);
+                add(5f);
+            }
+        };
+        List<List<Float>> A = new ArrayList<>(){
+            {
+                add(Arrays.asList(1f, -2f));
+                add(Arrays.asList(1f, 0f));
+                add(Arrays.asList(0f, -1f));
+            }
+        };
+        List<Float> b = new ArrayList<>(){
+            {
+                add(6f);
+                add(10f);
+                add(-1f);
+            }
+        };
+        Simplex simplex = new Simplex(C, A, b);
+        assertThrows(RuntimeException.class, () -> simplex.apply(2));
     }
 
 }
